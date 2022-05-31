@@ -1,0 +1,7 @@
+appName: rails-k8s-demo
+partOf: demo
+
+app:
+  componentName: app
+  listen: 3000
+  api_url: api.sometestdomain.me

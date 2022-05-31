@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.appName }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: {{ .Values.app.componentName }}
+    app.kubernetes.io/part-of: {{ .Values.partOf }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: {{ .Values.app.componentName }}
+      app.kubernetes.io/part-of: {{ .Values.partOf }}
+  replicas: 2
+  revisionHistoryLimit: 3
+  template:
+    metadata:
+      name: {{ .Release.Name }}
+      labels:
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/component: {{ .Values.app.componentName }}
+        app.kubernetes.io/part-of: {{ .Values.partOf }}
+    spec:
+      imagePullSecrets:
+        - name: "registry-lafrasia" # "k8s-demo-registry" in tutorial
+      containers:
+        - name: {{ .Release.Name }}
+          image: "registry.digitalocean.com/lafrasia/rails-k8s-demo:latest" #  "registry.digitalocean.com/wowinter13/rails-k8s-demo:latest" in tutorial
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: {{ .Values.app.listen }}
+              protocol: TCP
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}

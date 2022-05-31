@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.appName }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: {{ .Values.app.componentName }}
+    app.kubernetes.io/part-of: {{ .Values.partOf }}
+spec:
+  selector:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/component: {{ .Values.app.componentName }}
+    app.kubernetes.io/part-of: {{ .Values.partOf }}
+  ports:
+  - port: {{ .Values.app.listen }}
